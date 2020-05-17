@@ -39,10 +39,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created = db.Column('created', db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     email = db.Column(db.String(256), nullable=False, unique=True, index=True)
-    name = db.Column(db.String(512))
+    display_name = db.Column(db.String(512))
 
     def as_dict(self):
-        return {camel_case(a): getattr(self, a) for a in ['id', 'created', 'email', 'customer_id', 'enabled', 'super']}
+        d = {camel_case(a): getattr(self, a) for a in ['id', 'email', 'display_name']}
+        d['created'] = (self.created - epoch).total_seconds() * 1000
+        return d
 
 
 class UserRole(db.Model):
@@ -57,3 +59,18 @@ def find_dating_events():
     return query.all()
 
 
+def find_users():
+    query = db.session.query(User)
+    return query.all()
+
+
+def register_user(email: str, display_name: str) -> User:
+    existing_user = db.session.query(User).filter(User.email == email).first()
+    if existing_user is not None:
+        return existing_user
+    user = User()
+    user.email = email
+    user.display_name = display_name
+    db.session.add(user)
+    db.session.commit()
+    return user

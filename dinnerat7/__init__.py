@@ -49,6 +49,8 @@ def create_app(profile: str = None):
 
     from dinnerat7.api import api_web
     app.register_blueprint(api_web.bp)
+    from dinnerat7.api import api_auth
+    app.register_blueprint(api_auth.bp)
 
     @app.route('/')
     def api_home():

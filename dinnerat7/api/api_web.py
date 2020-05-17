@@ -1,14 +1,19 @@
 from flask import Blueprint, render_template, current_app
 
 from dinnerat7 import find_dating_events
+from dinnerat7.database import find_users
 
 bp = Blueprint('api_web', __name__, url_prefix='/api/web')
 
 
 @bp.route('/')
+@bp.route('/home')
 def api_default():
-    dating_events = find_dating_events()
-    return render_template('index.html', events=dating_events)
+    return render_template(
+        'index.html',
+        events=find_dating_events(),
+        users=find_users()
+    )
 
 
 @bp.route('/auth')
