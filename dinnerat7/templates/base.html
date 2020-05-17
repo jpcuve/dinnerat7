@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href='/static/style.css'/>
+    <link rel="stylesheet" href='/static/css/bootstrap.css'/>
+    <link rel="stylesheet" href='/static/css/style.css'/>
+    {% block header %}{% endblock %}
 </head>
 <body>
 <div>
     {% block container %}{% endblock %}
 </div>
-
 </body>
 </html>
